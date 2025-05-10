@@ -1,0 +1,64 @@
+import os
+
+os.system("clear")
+
+# Verificar e criar 
+for arquivo in ['metas.txt', 'registros.txt', 'perfil.txt']:
+    try:
+        with open(arquivo, 'r'):
+            pass
+    except FileNotFoundError:
+        with open(arquivo, 'x'):
+            pass
+
+movimentos = []
+Metas = []
+
+def menu_perfil():
+    nome = input("\nDigite o seu nome: ").strip()
+
+    with open('perfil.txt', 'r') as arquivo:
+        perfis = arquivo.readlines()
+
+    perfil_encontrado = None
+    for linha in perfis:
+        if linha.startswith(nome + ','):
+            perfil_encontrado = linha
+            break
+
+    if perfil_encontrado:
+        print(f"\nPerfil encontrado: {perfil_encontrado}")
+        opcao = int(input("\n1 - Editar Perfil\n2 - Sair\n\nEscolha a opção: "))
+        if opcao == 1:
+            editar_perfil(nome)
+    else:
+        print("\nPerfil não encontrado. Vamos criar um novo!")
+        criar_perfil(nome)
+
+def criar_perfil(nome):
+    altura = float(input("Digite a sua altura (em metros): "))
+    peso = float(input("Digite o seu peso (em kg): "))
+    genero = input("Digite o seu gênero: ")
+
+    with open('perfil.txt', 'a') as arquivo:
+        arquivo.write(f"{nome}, {altura}, {peso}, {genero}\n")
+
+    print("\nPerfil criado com sucesso!")
+
+def editar_perfil(nome):
+    print("\n--- Edição de Perfil ---")
+    altura = input("Digite a sua altura (em metros): ")
+    peso = input("Digite o seu peso (em kg): ")
+    genero = input("Digite o seu gênero: ")
+
+    with open('perfil.txt', 'r') as arquivo:
+        linhas = arquivo.readlines()
+
+    with open('perfil.txt', 'w') as arquivo:
+        for linha in linhas:
+            if linha.startswith(nome + ','):
+                arquivo.write(f"{nome}, {altura}, {peso}, {genero}\n")
+            else:
+                arquivo.write(linha)
+
+    print("\nPerfil atualizado com sucesso!")
